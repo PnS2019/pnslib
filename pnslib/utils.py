@@ -39,10 +39,12 @@ def speak(msg_str, options=None):
         speak_config = ["-ven+f3", "-k5", "-s150"]
     mplayer_base = ["/usr/bin/mplayer", "/tmp/pns_speak.wav"]
 
-    speak_cmd = speak_base+speak_config + \
-        [msg_str, "--stdout", ">", "/tmp/pns_speak.wav", "|"]+mplayer_base
+    with open("/tmp/pns_speak.wav", "w") as wav_file:
+        sp.call(speak_base+speak_config+[msg_str, "--stdout"],
+                stdout=wav_file)
+        wav_file.close()
 
-    return sp.check_output(speak_cmd, stderr=sp.PIPE)
+    return sp.check_output(mplayer_base, stderr=sp.PIPE, shell=True)
 
 
 def fashion_mnist_download(train=True, test=True, labels=True):
