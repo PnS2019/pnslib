@@ -42,7 +42,7 @@ def speak(msg_str, options=None):
     speak_cmd = speak_base+speak_config + \
         [msg_str, "--stdout", ">", "/tmp/pns_speak.wav", "|"]+mplayer_base
 
-    return sp.check_output(speak_cmd, stderr=sp.PIPE).decode("UTF-8")
+    return sp.check_output(speak_cmd, stderr=sp.PIPE)
 
 
 def fashion_mnist_download(train=True, test=True, labels=True):
