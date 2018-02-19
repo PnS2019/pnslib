@@ -164,3 +164,96 @@ def fashion_mnist_load(data_type="full"):
             dataset = dataset+(test_y,) if test_y is not None else dataset
 
     return dataset
+
+
+def generate_lr_data(num_data=10000, x_dim=1, x_coeff=[0, 2.5], function=None):
+    """Generate data for linear regression.
+
+    # Parameters
+    num_data : int
+        number of data point
+    x_dim : int
+        number of dimensions for each sample x
+    x_coeff : list
+        [mean, std]
+        generate samples in a specified normal distribution
+    function : function
+        A function that receives a vector x and produce y
+
+    Returns
+    -------
+    (train_x, train_y, test_x, test_y) : tuple
+        output datasets, assume 70/30 split
+    """
+    if function is None:
+        def f(x):
+            return 2*x+1
+
+        function = f
+
+    # generate random samples
+    X = np.random.randn(num_data, x_dim)*x_coeff[1]+x_coeff[0]
+    no_noise_Y = function(X)
+
+    # add noise to the data, fixed noise Normal(0, 0.09)
+    noise = np.random.randn(num_data, 1)*0.3
+    Y = no_noise_Y+noise
+
+    # split dataset
+    train_x = X[:int(0.7*num_data)]
+    train_y = Y[:int(0.7*num_data)]
+    test_x = X[int(0.7*num_data):]
+    test_y = Y[int(0.7*num_data):]
+
+    return (train_x, train_y, test_x, test_y)
+
+
+def generate_binary_data(
+        num_data=10000, x_dim=2,
+        c1_coeff=[0, 2.5], c2_coeff=[7, 2.5]):
+    """Generate two normal distributions that has different class label.
+
+    # Parameters
+    num_data : int
+        number of data points, split evenly for two classes
+    c1_coeff : list
+        [mean, std]
+        the distribution for the first distribution
+    c2_coeff : list
+        [mean, std]
+        the distribution for the second distribution
+
+    Returns
+    -------
+    (train_x, train_y, test_x, test_y) : tuple
+        output datasets, assume 70/30 split
+    """
+    # get num of samples for each class
+    num_c1_data = num_data // 2
+    num_c2_data = num_data-num_c1_data
+
+    # generate data and label
+    X_c1 = np.random.randn(num_c1_data, x_dim)*c1_coeff[1]+c1_coeff[0]
+    Y_c1 = np.zeros((num_c1_data, 1))
+
+    X_c2 = np.random.randn(num_c2_data, x_dim)*c2_coeff[1]+c2_coeff[0]
+    Y_c2 = np.ones((num_c2_data, 1))
+
+    # put some noise on Xs
+    X_c1 += np.random.randn(num_c1_data, x_dim)*0.3
+    X_c2 += np.random.randn(num_c2_data, x_dim)*0.3
+
+    # combine and shuffle
+    X = np.vstack((X_c1, X_c2))
+    Y = np.vstack((Y_c1, Y_c2))
+    shuffle_idx = np.random.permutation(num_data)
+    X = X[shuffle_idx]
+    Y = Y[shuffle_idx]
+
+    # split dataset
+    train_x = X[:int(0.7*num_data)]
+    train_y = Y[:int(0.7*num_data)]
+    test_x = X[int(0.7*num_data):]
+    test_y = Y[int(0.7*num_data):]
+
+    return (train_x, train_y, test_x, test_y)
