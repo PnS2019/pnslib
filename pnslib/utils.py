@@ -40,7 +40,7 @@ def speak(msg_str, options=None):
     mplayer_base = ["/usr/bin/mplayer", "/tmp/pns_speak.wav"]
 
     speak_cmd = speak_base+speak_config + \
-        [msg_str, ">", "/tmp/pns_speak.wav", "|"]+mplayer_base
+        [msg_str, "--stdout", ">", "/tmp/pns_speak.wav", "|"]+mplayer_base
 
     return sp.check_output(speak_cmd, stderr=sp.PIPE).decode("UTF-8")
 
