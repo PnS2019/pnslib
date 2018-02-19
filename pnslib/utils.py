@@ -20,6 +20,12 @@ def speak(msg_str, options=None):
         The candidate string to speak
     options : list
         espeak program options, use default config if None
+        default config
+        ["-ven+f3", "-k5", "-s150"]
+
+    # Returns
+    cmd_out : str
+        command output as string
     """
     speak_base = ["/usr/bin/espeak"]
     if options is not None and isinstance(options, list):
