@@ -11,4 +11,4 @@ PNSLIB_ROOT = os.path.join(HOME, ".pnslibres")
 PNSLIB_DATA = os.path.join(PNSLIB_ROOT, "data")
 
 if not os.path.isdir(PNSLIB_DATA):
-    os.mkdirs(PNSLIB_DATA)
+    os.makedirs(PNSLIB_DATA)

@@ -113,6 +113,11 @@ def fashion_mnist_load(data_type="full"):
     # Returns
     dataset : tuple
         a tuple of requested data
+        full: (train_x, train_y, test_x, test_y)
+        train: (train_x, train_y)
+        test: (test_x, test_y)
+        train_only: (train)
+        test_only: (test)
     """
     save_path = os.path.join(pnslib.PNSLIB_DATA, "fashion-mnist")
     if not os.path.isdir(save_path):
@@ -129,7 +134,7 @@ def fashion_mnist_load(data_type="full"):
         train_x_path = os.path.join(save_path, train_x_name)
         with gzip.open(train_x_path, "rb") as x_file:
             train_x = np.frombuffer(x_file.read(), dtype=np.uint8,
-                                    offset=16)
+                                    offset=16).reshape(60000, 28, 28, 1)
             x_file.close()
 
         dataset = dataset+(train_x,) if train_x is not None else dataset
@@ -145,7 +150,7 @@ def fashion_mnist_load(data_type="full"):
         test_x_path = os.path.join(save_path, test_x_name)
         with gzip.open(test_x_path, "rb") as x_file:
             test_x = np.frombuffer(x_file.read(), dtype=np.uint8,
-                                   offset=16)
+                                   offset=16).reshape(10000, 28, 28, 1)
             x_file.close()
         dataset = dataset+(test_x,) if test_x is not None else dataset
         if data_type != "test_only":
