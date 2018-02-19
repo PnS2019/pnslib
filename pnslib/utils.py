@@ -44,7 +44,7 @@ def speak(msg_str, options=None):
                 stdout=wav_file)
         wav_file.close()
 
-    return sp.check_output(mplayer_base, stderr=sp.PIPE, shell=True)
+    return sp.call(mplayer_base, stderr=sp.PIPE)
 
 
 def fashion_mnist_download(train=True, test=True, labels=True):
