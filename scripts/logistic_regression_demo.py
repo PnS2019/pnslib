@@ -45,19 +45,23 @@ plt.plot(
     test_x_c2[:, 0], test_x_c2[:, 1], ".g")
 plt.show()
 
-boundary_x = np.linspace(-5, 10)
+x_min, x_max = train_x[:, 0].min() - 1, train_x[:, 0].max() + 1
+y_min, y_max = train_x[:, 1].min() - 1, train_x[:, 1].max() + 1
+xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.2),
+                     np.arange(y_min, y_max, 0.2))
+boundary_x = np.c_[xx.ravel(), yy.ravel()]
+print (np.c_[xx.ravel(), yy.ravel()].shape)
 for idx in xrange(num_epochs):
     print ("Training %d epochs" % (idx))
 
     if idx % 20 == 0 or idx == num_epochs-1:
+        boundary_y = model.predict(boundary_x)
+        boundary_y = boundary_y.reshape(xx.shape)
         weight_list = model.get_weights()
-        a = -weight_list[0][0]/weight_list[0][1]
-        boundary_y = a*boundary_x - (weight_list[1][0]/weight_list[0][1])
         plt.plot(
             test_x_c1[:, 0], test_x_c1[:, 1], ".r",
-            test_x_c2[:, 0], test_x_c2[:, 1], ".g",
-            boundary_x, boundary_y)
-
+            test_x_c2[:, 0], test_x_c2[:, 1], ".g")
+        plt.contour(xx, yy, boundary_y, cmap=plt.cm.Paired)
         plt.title("Epoch %d" % (idx))
         plt.show()
 
