@@ -245,7 +245,7 @@ def generate_lr_data(num_data=10000, x_dim=1, x_coeff=[0, 2.5], function=None):
 
 def generate_binary_data(
         num_data=10000, x_dim=2,
-        c1_coeff=[0, 2.5], c2_coeff=[7, 2.5]):
+        c1_coeff=[0, 2.5], c2_coeff=[10, 2.5]):
     """Generate two normal distributions that has different class label.
 
     # Parameters
