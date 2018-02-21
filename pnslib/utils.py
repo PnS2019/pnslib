@@ -166,6 +166,41 @@ def fashion_mnist_load(data_type="full"):
     return dataset
 
 
+def binary_fashion_mnist_load(class_list=[0, 1]):
+    """Select binary fashion MNIST dataset.
+
+    # Parameters
+    class_list : list
+        a list of two values between 0 to 9
+
+    # Returns
+    dataset : tuple
+        a tuple of requested data
+        (train_x, train_y, test_x, test_y)
+    """
+    assert len(class_list) == 2
+    train_x, train_y, test_x, test_y = fashion_mnist_load("full")
+
+    # build up idx
+    train_idx = np.logical_or(
+            train_y == class_list[0], train_y == class_list[1])
+    test_idx = np.logical_or(
+            test_y[:] == class_list[0], test_y[:] == class_list[1])
+    # select elements
+    train_x = train_x[train_idx]
+    train_y = train_y[train_idx]
+    test_x = test_x[test_idx]
+    test_y = test_y[test_idx]
+
+    # post processing
+    train_y[train_y == class_list[0]] = 0
+    train_y[train_y == class_list[1]] = 1
+    test_y[test_y == class_list[0]] = 0
+    test_y[test_y == class_list[1]] = 1
+
+    return (train_x, train_y, test_x, test_y)
+
+
 def generate_lr_data(num_data=10000, x_dim=1, x_coeff=[0, 2.5], function=None):
     """Generate data for linear regression.
 
