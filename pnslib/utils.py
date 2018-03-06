@@ -101,7 +101,7 @@ def fashion_mnist_download(train=True, test=True, labels=True):
                             stderr=sp.PIPE).decode("UTF-8")
 
 
-def fashion_mnist_load(data_type="full"):
+def fashion_mnist_load(data_type="full", flatten=False):
     """Loading Fashion MNIST dataset.
 
     # Parameters
@@ -111,6 +111,9 @@ def fashion_mnist_load(data_type="full"):
         test : testing and its labels
         train-only : only training dataset
         test-only : only testing dataset
+    flatten : bool
+        reshape to 4D tensor if True
+        2D tensor if False
 
     # Returns
     dataset : tuple
@@ -135,8 +138,12 @@ def fashion_mnist_load(data_type="full"):
     if data_type in ["train", "train_only", "full"]:
         train_x_path = os.path.join(save_path, train_x_name)
         with gzip.open(train_x_path, "rb") as x_file:
-            train_x = np.frombuffer(x_file.read(), dtype=np.uint8,
-                                    offset=16).reshape(60000, 28, 28, 1)
+            if flatten is False:
+                train_x = np.frombuffer(x_file.read(), dtype=np.uint8,
+                                        offset=16).reshape(60000, 28, 28, 1)
+            else:
+                train_x = np.frombuffer(x_file.read(), dtype=np.uint8,
+                                        offset=16).reshape(60000, 784)
             x_file.close()
 
         dataset = dataset+(train_x,) if train_x is not None else dataset
@@ -151,8 +158,12 @@ def fashion_mnist_load(data_type="full"):
     if data_type in ["test", "test_only", "full"]:
         test_x_path = os.path.join(save_path, test_x_name)
         with gzip.open(test_x_path, "rb") as x_file:
-            test_x = np.frombuffer(x_file.read(), dtype=np.uint8,
-                                   offset=16).reshape(10000, 28, 28, 1)
+            if flatten is False:
+                test_x = np.frombuffer(x_file.read(), dtype=np.uint8,
+                                       offset=16).reshape(10000, 28, 28, 1)
+            else:
+                test_x = np.frombuffer(x_file.read(), dtype=np.uint8,
+                                       offset=16).reshape(10000, 784)
             x_file.close()
         dataset = dataset+(test_x,) if test_x is not None else dataset
         if data_type != "test_only":
@@ -166,12 +177,15 @@ def fashion_mnist_load(data_type="full"):
     return dataset
 
 
-def binary_fashion_mnist_load(class_list=[0, 1]):
+def binary_fashion_mnist_load(class_list=[0, 1], flatten=False):
     """Select binary fashion MNIST dataset.
 
     # Parameters
     class_list : list
         a list of two values between 0 to 9
+    flatten : bool
+        reshape to 4D tensor if True
+        2D tensor if False
 
     # Returns
     dataset : tuple
@@ -179,7 +193,8 @@ def binary_fashion_mnist_load(class_list=[0, 1]):
         (train_x, train_y, test_x, test_y)
     """
     assert len(class_list) == 2
-    train_x, train_y, test_x, test_y = fashion_mnist_load("full")
+    train_x, train_y, test_x, test_y = fashion_mnist_load("full",
+                                                          flatten=flatten)
 
     # build up idx
     train_idx = np.logical_or(
