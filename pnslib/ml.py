@@ -75,7 +75,6 @@ def pca_fit(X, R, n_components=None):
     X_reduce : np.ndarray
         the array with reduced dimension.
     """
-    pass
     n_dim = X.shape[1]
     if n_components is not None:
         assert n_components <= n_dim
