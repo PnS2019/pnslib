@@ -8,25 +8,20 @@ from __future__ import print_function, absolute_import
 import numpy as np
 from skimage.io import imread
 from skimage.filters import threshold_adaptive
+from skimage.filters import laplace
+from skimage.filters import sobel_h, sobel_v
+from skimage.feature import canny
 
 import matplotlib.pyplot as plt
 
 # read image
 img = imread("Lenna.png", as_grey=True)
 
-th1 = img > 0.5
+edges = canny(img)
 
-th2 = img > threshold_adaptive(img, 11, method="mean", offset=2/255.)
+plt.subplot(121), plt.imshow(img, cmap='gray')
+plt.title('Original Image'), plt.xticks([]), plt.yticks([])
+plt.subplot(122), plt.imshow(edges, cmap='gray')
+plt.title('Edge Image'), plt.xticks([]), plt.yticks([])
 
-th3 = img > threshold_adaptive(img, 11, method="gaussian", offset=2/255.)
-
-
-titles = ['Original Image', 'Global Thresholding (v = 127)',
-          'Adaptive Mean Thresholding', 'Adaptive Gaussian Thresholding']
-images = [img, th1, th2, th3]
-
-for i in xrange(4):
-    plt.subplot(2, 2, i+1), plt.imshow(images[i], 'gray')
-    plt.title(titles[i])
-    plt.xticks([]), plt.yticks([])
 plt.show()
