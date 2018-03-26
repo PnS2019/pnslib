@@ -44,6 +44,7 @@ setup(
       },
 
     packages=find_packages(),
+    package_data={"pnslib": ["haarcascades/*.*"]},
 
     classifiers=list(filter(None, classifiers.split('\n'))),
     description="P&SLib - Utilities for P&S module projects and demos."

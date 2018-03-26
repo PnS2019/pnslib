@@ -307,3 +307,8 @@ def generate_binary_data(
     test_y = Y[int(0.7*num_data):]
 
     return (train_x, train_y, test_x, test_y)
+
+
+def get_haarcascade_path(xml_name):
+    """Get haar cascade path according to the given xml file."""
+    return os.path.join(pnslib.HAAR_FEATURE_PATH, xml_name)
