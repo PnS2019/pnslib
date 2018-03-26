@@ -6,7 +6,6 @@ Email : duguyue100@gmail.com
 from __future__ import print_function, absolute_import
 
 import cv2
-
 from pnslib import utils
 
 # read image
