@@ -11,11 +11,14 @@ from matplotlib import pyplot as plt
 
 MIN_MATCH_COUNT = 10
 
-img1_color = cv2.imread('Lenna.png', 0)
-img2_color = cv2.imread('Lenna_and_objects.jpg', 0)
+img1_color = cv2.imread('Lenna.png')
+img2_color = cv2.imread('Lenna_and_objects.jpg')
 
 img1 = cv2.cvtColor(img1_color, cv2.COLOR_BGR2GRAY)
 img2 = cv2.cvtColor(img2_color, cv2.COLOR_BGR2GRAY)
+
+img1_color = cv2.cvtColor(img1_color, cv2.COLOR_BGR2RGB)
+img2_color = cv2.cvtColor(img2_color, cv2.COLOR_BGR2RGB)
 
 # Initiate SIFT detector
 sift = cv2.xfeatures2d.SIFT_create()
@@ -45,7 +48,8 @@ if len(good) > MIN_MATCH_COUNT:
     pts = np.float32(
         [[0, 0], [0, h-1], [w-1, h-1], [w-1, 0]]).reshape(-1, 1, 2)
     dst = cv2.perspectiveTransform(pts, M)
-    img2 = cv2.polylines(img2, [np.int32(dst)], True, 255, 3, cv2.LINE_AA)
+    img2_color = cv2.polylines(img2_color, [np.int32(dst)],
+                               True, [0, 0, 255], 10, cv2.LINE_AA)
 else:
     print("Not enough matches are found - {}/{}".format(
         len(good), MIN_MATCH_COUNT))
@@ -55,5 +59,6 @@ draw_params = dict(matchColor=(0, 255, 0),
                    singlePointColor=None,
                    matchesMask=matchesMask,
                    flags=2)
-img3 = cv2.drawMatches(img1_color, kp1, img2_color, kp2, good, None, **draw_params)
+img3 = cv2.drawMatches(img1_color, kp1, img2_color, kp2, good, None,
+                       **draw_params)
 plt.imshow(img3, 'gray'), plt.show()
