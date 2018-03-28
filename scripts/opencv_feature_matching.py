@@ -11,8 +11,11 @@ from matplotlib import pyplot as plt
 
 MIN_MATCH_COUNT = 10
 
-img1 = cv2.imread('Lenna.png', 0)
-img2 = cv2.imread('Lenna_and_objects.jpg', 0)
+img1_color = cv2.imread('Lenna.png', 0)
+img2_color = cv2.imread('Lenna_and_objects.jpg', 0)
+
+img1 = cv2.cvtColor(img1_color, cv2.COLOR_BGR2GRAY)
+img2 = cv2.cvtColor(img2_color, cv2.COLOR_BGR2GRAY)
 
 # Initiate SIFT detector
 sift = cv2.xfeatures2d.SIFT_create()
@@ -52,5 +55,5 @@ draw_params = dict(matchColor=(0, 255, 0),
                    singlePointColor=None,
                    matchesMask=matchesMask,
                    flags=2)
-img3 = cv2.drawMatches(img1, kp1, img2, kp2, good, None, **draw_params)
+img3 = cv2.drawMatches(img1_color, kp1, img2_color, kp2, good, None, **draw_params)
 plt.imshow(img3, 'gray'), plt.show()
