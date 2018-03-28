@@ -1,4 +1,4 @@
-"""Testing for OpenCV.
+"""Testing for OpenCV Feature Mapping and Homography.
 
 Author: Yuhuang Hu
 Email : duguyue100@gmail.com
