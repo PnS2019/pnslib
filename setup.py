@@ -26,7 +26,7 @@ License :: OSI Approved :: MIT License
 
 __version__ = "0.1.0-alpha.1"
 __author__ = "P&S DLnRPI Team"
-__url__ = "https://github.com/PnS2018/pnslib"
+__url__ = "https://github.com/PnS2019/pnslib"
 
 setup(
     name='pnslib',
